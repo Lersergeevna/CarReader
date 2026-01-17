@@ -1,7 +1,8 @@
 package app;
 
 public final class Menu {
-    private Menu() {}
+    private Menu() {
+    }
 
     public static void print() {
         System.out.println("\n=== MENU ===");
@@ -15,4 +16,5 @@ public final class Menu {
         System.out.println("0) Выход");
         System.out.print("Выбрать: ");
     }
+}
 
