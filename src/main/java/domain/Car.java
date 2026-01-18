@@ -39,7 +39,7 @@ public final class Car implements Comparable<Car> {
 
     @Override
     public String toString() {
-        return "Car{power=" + power + ", model='" + model + "', year=" + year + "}";
+        return "Автомобиль{мощность = " + power + ", модель = '" + model + "', год = " + year + "}";
     }
 
     @Override
@@ -80,9 +80,9 @@ public final class Car implements Comparable<Car> {
         }
 
         public Car build() {
-            if (power <= 0) throw new IllegalArgumentException("power must be > 0");
-            if (model == null || model.trim().isEmpty()) throw new IllegalArgumentException("model is blank");
-            if (year < 1886 || year > 2100) throw new IllegalArgumentException("year is out of range");
+            if (power <= 0) throw new IllegalArgumentException("Мощность должна быть больше 0");
+            if (model == null || model.trim().isEmpty()) throw new IllegalArgumentException("Модель не определена");
+            if (year < 1886 || year > 2100) throw new IllegalArgumentException("Указанный год не входит в диапазон");
             return new Car(this);
         }
     }
