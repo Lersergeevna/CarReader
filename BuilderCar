@@ -1,8 +1,8 @@
-```java
 /**
  * Класс автомобиля. Immutable (неизменяемый) за счет final полей.
  * Реализует Comparable для базовой сортировки по всем 3 полям.
  */
+```java
 public final class Car implements Comparable<Car> {
     private final String model;
     private final int power;
