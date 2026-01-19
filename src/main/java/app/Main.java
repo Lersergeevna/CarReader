@@ -67,7 +67,7 @@ public class Main {
             }
         }
 
-        System.out.println("Выход из программы.");
+        System.out.println("Выход из программы");
     }
 
     private static MyArrayList<Car> createOrLoadCars() {
