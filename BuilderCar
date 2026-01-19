@@ -1,0 +1,82 @@
+/**
+ * Класс автомобиля. Immutable (неизменяемый) за счет final полей.
+ * Реализует Comparable для базовой сортировки по всем 3 полям.
+ */
+public final class Car implements Comparable<Car> {
+    private final String model;
+    private final int power;
+    private final int year;
+
+    // Приватный конструктор: создание объекта возможно только через Builder
+    private Car(Builder builder) {
+        this.model = builder.model;
+        this.power = builder.power;
+        this.year = builder.year;
+    }
+
+    public String getModel() { return model; }
+    public int getPower() { return power; }
+    public int getYear() { return year; }
+
+    /**
+     * Логика сравнения: сначала по модели, затем по мощности, затем по году.
+     */
+    @Override
+    public int compareTo(Car other) {
+        // Сравнение по модели (алфавитный порядок)
+        int res = this.model.compareTo(other.model);
+        if (res != 0) return res;
+
+        // Если модели одинаковые, сравниваем мощность
+        res = Integer.compare(this.power, other.power);
+        if (res != 0) return res;
+
+        // Если и мощность совпала, сравниваем по году
+        return Integer.compare(this.year, other.year);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Автомобиль [Модель: %s, Мощность: %d л.с., Год: %d]", model, power, year);
+    }
+
+    /**
+     * Паттерн Builder для гибкого и безопасного создания объекта.
+     */
+    public static class Builder {
+        private String model;
+        private int power;
+        private int year;
+
+        public Builder setModel(String model) {
+            Validators.validateModel(model); // Валидация при установке значения
+            this.model = model;
+            return this;
+        }
+
+        public Builder setPower(int power) {
+            Validators.validatePower(power);
+            this.power = power;
+            return this;
+        }
+
+        public Builder setYear(int year) {
+            Validators.validateYear(year);
+            this.year = year;
+            return this;
+        }
+
+        public Car build() {
+            // Проверка, что все обязательные поля были инициализированы
+            if (model == null) throw new ValidationException("Ошибка: Поле 'Модель' не заполнено.");
+            return new Car(this);
+        }
+    }
+}
+
+
+        public Car build() {
+            return new Car(this);
+        }
+    }
+}
