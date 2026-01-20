@@ -1,11 +1,19 @@
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.stream.Collector;
 
 public class MyArrayList<T> implements Iterable<T> {
     private static final int DEFAULT_CAPACITY = 10;
     private Object[] elements;
     private int size;
+
+    public static <T> Collector<T, ?, MyArrayList<T>> toMyArrayList() {
+        return Collector.of(MyArrayList::new, MyArrayList::add, (l, r) -> {
+            r.forEach(l::add);
+            return l;
+        });
+    }
 
     public MyArrayList() {
         this.elements = new Object[DEFAULT_CAPACITY];
@@ -17,6 +25,10 @@ public class MyArrayList<T> implements Iterable<T> {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
     }
+    @SuppressWarnings("unchecked")
+    private T elementAt(int index) {
+        return (T) elements[index];
+    }
 
     public void add(T item) {
         ensureCapacity();
@@ -24,28 +36,21 @@ public class MyArrayList<T> implements Iterable<T> {
     }
     public T remove(int index) {
         rangeCheck(index);
-        @SuppressWarnings("unchecked")
-
-        T removed = (T) elements[index];
-
-        System.arraycopy(elements, index + 1, elements, index, size - index - 1);
-
-        // Очищаем последний элемент (во избежание утечек)
+        T removed = elementAt(index);
+        for (int i = index; i < size - 1; i++) {
+            elements[i] = elements[i + 1];
+        }
         elements[--size] = null;
-
         return removed;
     }
     public T get(int index) {
         rangeCheck(index);
-        @SuppressWarnings("unchecked")
-        T result = (T) elements[index];
-        return result;
+        return elementAt(index);
     }
 
     public T set(int index, T item) {
         rangeCheck(index);
-        @SuppressWarnings("unchecked")
-        T old = (T) elements[index];
+        T old =  elementAt(index);
         elements[index] = item;
         return old;
       }
@@ -76,9 +81,7 @@ public class MyArrayList<T> implements Iterable<T> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                @SuppressWarnings("unchecked")
-                T result = (T) elements[currentIndex++];
-                return result;
+                return elementAt(currentIndex++);
             }
         };
     }
