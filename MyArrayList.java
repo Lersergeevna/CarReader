@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class MyArrayList<T> implements Iterable<T> {
     private static final int DEFAULT_CAPACITY = 10;
@@ -10,14 +12,19 @@ public class MyArrayList<T> implements Iterable<T> {
         this.size = 0;
     }
 
+    private void rangeCheck(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+    }
+
     public void add(T item) {
         ensureCapacity();
         elements[size++] = item;
     }
     public T remove(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
-        }
+        rangeCheck(index);
+        @SuppressWarnings("unchecked")
 
         T removed = (T) elements[index];
 
@@ -29,20 +36,19 @@ public class MyArrayList<T> implements Iterable<T> {
         return removed;
     }
     public T get(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
-        }
-        return (T) elements[index];
+        rangeCheck(index);
+        @SuppressWarnings("unchecked")
+        T result = (T) elements[index];
+        return result;
     }
 
     public T set(int index, T item) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
-        }
+        rangeCheck(index);
+        @SuppressWarnings("unchecked")
         T old = (T) elements[index];
         elements[index] = item;
         return old;
-    }
+      }
 
     public int size() {
         return size;
@@ -70,11 +76,15 @@ public class MyArrayList<T> implements Iterable<T> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return (T) elements[currentIndex++];
+                @SuppressWarnings("unchecked")
+                T result = (T) elements[currentIndex++];
+                return result;
             }
         };
     }
     public java.util.stream.Stream<T> stream() {
-        return java.util.stream.StreamSupport.stream(this.spliterator(), false);
+        @SuppressWarnings("unchecked")
+        T[] arr = (T[]) Arrays.copyOf(elements, size, Object[].class);
+        return java.util.Arrays.stream(arr);
     }
 }
