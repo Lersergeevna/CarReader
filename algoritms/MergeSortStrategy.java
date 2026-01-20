@@ -1,62 +1,51 @@
 // Сортировка слияниемы
+import java.util.Comparator;
 public class MergeSortStrategy<T> implements SortingStrategy<T> {
     @Override
-    public void sort(MyArrayList<T> list, java.util.Comparator<T> comparator) {
+    public void sort(MyArrayList<T> list, Comparator<T> comparator) {
         if (list == null || list.size() < 2) {
             return;
         }
-        performMergeSort(list, 0, list.size() - 1, comparator);
+        Object[] temp = new Object[list.size()];
+        performMergeSort(list, 0, list.size() - 1, comparator, temp);
     }
 
-    private void performMergeSort(MyArrayList<T> list, int left, int right, Comparator<T> comparator) {
+    private void performMergeSort(MyArrayList<T> list, int left, int right, Comparator<T> comparator, Object[] temp) {
         if (left < right) {
             int mid = left + (right - left) / 2;
 
-            performMargeSort(list, left, mid, comparator);
-            performMargeSort(list, mid + 1, right, comparator);
+            performMergeSort(list, left, mid, comparator, temp);
+            performMergeSort(list, mid + 1, right, comparator, temp);
 
-            merge(list, left, mid, right, comparator);
+            merge(list, left, mid, right, comparator, temp);
         }
     }
 
     @SuppressWarnings("unchecked")
-    private void merge(MyArrayList<T> list, int left, int mid, int right, Comparator<T> comparator) {
-        int n1 = mid - left + 1;
-        int n2 = right - mid;
-
-        Object[] leftArray = new Object[n1];
-        Object[] rightArray = new Object[n2];
-
-        for (int i = 0;  i < n1; ++i) {
-            leftArray[i] = list.get(left + i);
-        }
-        for (int j = 0; j < n2; ++j) {
-            rightArray[j] = list.get(mid + 1 + j);
+    private void merge(MyArrayList<T> list, int left, int mid, int right, Comparator<T> comparator, Object[] temp) {
+        for (int i = left; i <= right; i++) {
+            temp[i] = list.get(i);
         }
 
-        int i = 0, j = 0;
+        int i = left;
+        int j = mid + 1;
         int k = left;
 
-        while(i < n1 && j < n2) {
-            if (comparator.compare((T) leftArray[i], (T) rightArray[j]) <= 0) {
-                list.set(k, (T) leftArray[i]);
+        while (i <= mid && j <= right) {
+            if (comparator.compare((T) temp[i], (T) temp[j]) <= 0) {
+                list.set(k, (T) temp[i]);
                 i++;
-            } else {
-                list.set(k, (T) rightArray[j]);
+            }
+            else {
+                list.set(k, (T) temp[j]);
                 j++;
             }
             k++;
         }
 
-        while (i < n1) {
-            list.set(k, (T) leftArray[i]);
+        while (i <= mid) {
+            list.set(k, (T) temp[i]);
             i++;
-            k++;
-        }
-
-        while (j < n2) {
-            list.set(k, (T) rightArray[j]);
-            j++;
             k++;
         }
     }
