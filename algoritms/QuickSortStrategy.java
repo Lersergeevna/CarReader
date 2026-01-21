@@ -1,9 +1,14 @@
 // Быстрая сортировка
+import java.util.Objects;
 import java.util.Comparator;
 
 public class QuickSortStrategy<T> implements SortingStrategy<T> {
     @Override
     public void sort(MyArrayList<T> list, Comparator<T> comparator) {
+        Objects.requireNonNull(list, "Список не заполнен данными");
+        Objects.requireNonNull(comparator, "Компаратор, не получил данные из списка");
+        if (list.size() < 2) return;
+
         quickSort(list, 0, list.size() - 1, comparator);
     }
 
@@ -28,7 +33,8 @@ public class QuickSortStrategy<T> implements SortingStrategy<T> {
         T pivot = list.get(high);
         int i = low - 1;
         for (int j = low; j < high; j++) {
-            if (comparator.compare(list.get(j), pivot) < 0) {
+            T current = list.get(j);
+            if (comparator.compare(current, pivot) < 0) {
                 i++;
                 swap(list, i, j);
             }
@@ -38,6 +44,7 @@ public class QuickSortStrategy<T> implements SortingStrategy<T> {
     }
 
     private void swap(MyArrayList<T> list, int i, int j) {
+        if (i == j) return;
         T temp = list.get(i);
         list.set(i, list.get(j));
         list.set(j, temp);
