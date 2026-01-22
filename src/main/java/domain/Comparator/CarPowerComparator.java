@@ -8,6 +8,6 @@ import domain.Car;
  */
 public class CarPowerComparator implements Comparator<Car> {
     public int compare(Car a, Car b) {
-        return a.getPower() - b.getPower();
-    }    
+        return Integer.compare(a.getPower(), b.getPower());
+    }
 }
