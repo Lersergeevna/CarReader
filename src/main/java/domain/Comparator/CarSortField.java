@@ -1,5 +1,19 @@
 package domain.Comparator;
 
+/**
+ * Поля сортировки массива автомобилей
+ */
 public enum CarSortField {
-	YEAR, MODEL, POWER
+	/**
+	 * Модель
+	 */
+	MODEL, 
+	/**
+	 * Год выпуска
+	 */
+	YEAR, 
+	/**
+	 * Мощность двигателя
+	 */
+	POWER
 }
