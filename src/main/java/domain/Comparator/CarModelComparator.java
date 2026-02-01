@@ -8,7 +8,5 @@ import domain.Car;
  */
 public class CarModelComparator implements Comparator<Car> {
     @Override
-    public int compare(Car a, Car b) {
-        return a.getModel().compareToIgnoreCase(b.getModel());
-    }    
+    public int compare(Car a, Car b) { return a.getModel().compareToIgnoreCase(b.getModel()); }
 }
