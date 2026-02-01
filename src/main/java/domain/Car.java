@@ -3,54 +3,55 @@ package domain;
 import java.util.Objects;
 
 public final class Car implements Comparable<Car> {
+    private final int power;      // Мощность
     private final String model;   // Модель
     private final int year;       // Год производства
-    private final int power;      // Мощность
 
     private Car(Builder b) {
+        this.power = b.power;
         this.model = b.model;
         this.year = b.year;
-        this.power = b.power;
+    }
+
+    public int getPower() {
+        return power;
     }
 
     public String getModel() {
         return model;
     }
+
     public int getYear() {
         return year;
-    }
-    public int getPower() {
-        return power;
     }
 
     @Override
     public int compareTo(Car other) {
-        Objects.requireNonNull(other, "Аргумент не должен быть равен null");
-
-        int c1 = this.model.compareToIgnoreCase(other.model);
+        if (other == null) return 1;
+        int c1 = Integer.compare(this.power, other.power);
         if (c1 != 0) return c1;
 
-        return Integer.compare(this.year, other.year);
-
-        int c2 = Integer.compare(this.power, other.power);
+        int c2 = this.model.compareToIgnoreCase(other.model);
         if (c2 != 0) return c2;
+
+        return Integer.compare(this.year, other.year);
     }
 
     @Override
     public String toString() {
-        return "Автомобиль{модель = " + model + ", год = '" + year + "', мощность = " + power + "}";
+        return "Автомобиль{модель = " + model + ", год = " + year + ", мощность = " + power + "}";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Car)) return false;
-        return Objects.equals(model, car.model) && year == car.year && power == car.power;
+        Car car = (Car) o;
+        return power == car.power && year == car.year && Objects.equals(model, car.model);
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(model, year, power);
     }
 
@@ -73,7 +74,7 @@ public final class Car implements Comparable<Car> {
             return this;
         }
 
-        public domain.Car.Builder power(int power) {
+        public Builder power(int power) {
             this.power = power;
             return this;
         }
