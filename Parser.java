@@ -1,45 +1,56 @@
-public final class Parser {
-    private Parser() {}
+import domain.Car;
 
-    /**
-     * Парсинг строки в формате: мощность,модель,год
-     */
-    public static Car fromCsv(String csvLine) {
-        if (csvLine == null || csvLine.isBlank()) {
-            throw new ValidationException("Ошибка: Передана пустая строка.");
+import validation.ValidationException;
+
+public final class CarCsvParser {
+    private CarCsvParser() {}
+
+    public static Car parseLine(String csvLine) {
+        if (csvLine == null) {
+            throw new ValidationException("Строка CSV равна null");
         }
 
-        String[] parts = csvLine.split(",");
+        String line = csvLine.strip();
+        if (line.isEmpty()) {
+            throw new ValidationException("Пустая строка CSV");
+        }
+
+        String[] parts = line.split(",", -1);
         if (parts.length != 3) {
-            throw new ValidationException("Ошибка в строке [" + csvLine + "]: Ожидалось 3 параметра (мощность, модель, год).");
+            throw new ValidationException(
+                    "Ошибка в строке [" + csvLine + "]: ожидалось 3 поля (мощность, модель, год)"
+            );
         }
 
         try {
-            // Читаем в новом порядке: Power(0), Model(1), Year(2)
             int power = Integer.parseInt(parts[0].strip());
             String model = parts[1].strip();
             int year = Integer.parseInt(parts[2].strip());
 
-            return new Car.Builder()
-                    .setPower(power)
-                    .setModel(model)
-                    .setYear(year)
+            // Валидация будет выполнена внутри Car.Builder через Validators
+            return Car.builder()
+                    .power(power)
+                    .model(model)
+                    .year(year)
                     .build();
+
         } catch (NumberFormatException e) {
-            throw new ValidationException("Ошибка в строке [" + csvLine + "]: Мощность или год не являются числами.");
+            throw new ValidationException(
+                    "Ошибка в строке [" + csvLine + "]: мощность и год должны быть целыми числами"
+            );
         } catch (ValidationException e) {
-            // Перебрасываем ошибку валидации с указанием проблемной строки
             throw new ValidationException("Ошибка в строке [" + csvLine + "]: " + e.getMessage());
         }
     }
 
-    public static String toCsv(Car car) {
+    public static String toLine(Car car) {
         if (car == null) {
-            throw new ValidationException("Ошибка: Попытка преобразовать null-объект. Операция отменена во избежание записи пустых строк.");
+            throw new ValidationException("Нельзя преобразовать null в CSV");
         }
-        return String.format("%d,%s,%d", car.getPower(), car.getModel(), car.getYear());
+        return car.getPower() + "," + car.getModel() + "," + car.getYear();
     }
 }
+
 
 
 
