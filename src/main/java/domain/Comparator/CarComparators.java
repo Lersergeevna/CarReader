@@ -10,7 +10,7 @@ import domain.Comparator.*;
  * Класс компаратора из всех возможных вариантов сортировок по полям
  */
 public final class CarComparators {
-	public CarComparators() {}
+	private CarComparators() {}
 	
 	/**
 	 * Базовые компараторы по полям
