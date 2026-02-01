@@ -3,56 +3,55 @@ package domain;
 import java.util.Objects;
 
 public final class Car implements Comparable<Car> {
-    private final int power;      // Мощность
     private final String model;   // Модель
     private final int year;       // Год производства
+    private final int power;      // Мощность
 
     private Car(Builder b) {
-        this.power = b.power;
         this.model = b.model;
         this.year = b.year;
-    }
-
-    public int getPower() {
-        return power;
+        this.power = b.power;
     }
 
     public String getModel() {
         return model;
     }
-
     public int getYear() {
         return year;
+    }
+    public int getPower() {
+        return power;
     }
 
     @Override
     public int compareTo(Car other) {
-        if (other == null) return 1;
-        int c1 = Integer.compare(this.power, other.power);
+        Objects.requireNonNull(other, "Аргумент не должен быть равен null");
+
+        int c1 = this.model.compareToIgnoreCase(other.model);
         if (c1 != 0) return c1;
 
-        int c2 = this.model.compareToIgnoreCase(other.model);
-        if (c2 != 0) return c2;
-
         return Integer.compare(this.year, other.year);
+
+        int c2 = Integer.compare(this.power, other.power);
+        if (c2 != 0) return c2;
     }
 
     @Override
     public String toString() {
-        return "Автомобиль{мощность = " + power + ", модель = '" + model + "', год = " + year + "}";
+        return "Автомобиль{модель = " + model + ", год = '" + year + "', мощность = " + power + "}";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Car)) return false;
-        Car car = (Car) o;
-        return power == car.power && year == car.year && Objects.equals(model, car.model);
+        return Objects.equals(model, car.model) && year == car.year && power == car.power;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(power, model, year);
+
+        return Objects.hash(model, year, power);
     }
 
     public static Builder builder() {
@@ -60,14 +59,9 @@ public final class Car implements Comparable<Car> {
     }
 
     public static final class Builder {
-        private int power;
         private String model;
         private int year;
-
-        public Builder power(int power) {
-            this.power = power;
-            return this;
-        }
+        private int power;
 
         public Builder model(String model) {
             this.model = model;
@@ -79,10 +73,15 @@ public final class Car implements Comparable<Car> {
             return this;
         }
 
+        public domain.Car.Builder power(int power) {
+            this.power = power;
+            return this;
+        }
+
         public Car build() {
-            if (power <= 0) throw new IllegalArgumentException("Мощность должна быть больше 0");
-            if (model == null || model.trim().isEmpty()) throw new IllegalArgumentException("Модель не определена");
-            if (year < 1886 || year > 2100) throw new IllegalArgumentException("Указанный год не входит в диапазон");
+            Validators.validateModel(model);
+            Validators.validateYear(year);
+            Validators.validatePower(power);
             return new Car(this);
         }
     }
