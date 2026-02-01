@@ -1,4 +1,4 @@
-package domain.Comparator;
+package sorting;
 
 public enum SortType {
     INSERTION,
