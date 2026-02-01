@@ -20,11 +20,11 @@ public final class Car implements Comparable<Car> {
     public int compareTo(Car other) {
         Objects.requireNonNull(other, "Аргумент не должен быть равен null");
 
-        int c1 = this.model.compareToIgnoreCase(other.model);
+        int c1 = Integer.compare(this.power, other.power);
         if (c1 != 0) return c1;
-
-        int c2 = Integer.compare(this.power, other.power);
-        if (c2 != 0) return c2;
+        
+        int c2 = this.model.compareToIgnoreCase(other.model);
+        if (c2 != 0) return c2;     
 
         return Integer.compare(this.year, other.year);
     }
