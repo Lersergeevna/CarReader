@@ -13,22 +13,18 @@ public final class CarComparators {
 	public CarComparators() {}
 	
 	/**
-	 * Базовые компаратор по полю модели
-	 */ 
+	 * Базовые компараторы по полям
+	 */
     public static Comparator<Car> byModel() {
         return new CarModelComparator();
     }
-	/**
-	 * Базовые компаратор по полю мощности
-	 */ 
-    public static Comparator<Car> byPower() {
-        return new CarPowerComparator();
-    }
-	/**
-	 * Базовые компаратор по полю года производства
-	 */ 
+
     public static Comparator<Car> byYear()  {
         return new CarYearComparator();
+    }
+
+    public static Comparator<Car> byPower() {
+        return new CarPowerComparator();
     }
 
     /**
@@ -79,8 +75,8 @@ public final class CarComparators {
 		private static Comparator<Car> base(CarSortField field, boolean asc){
 			Comparator<Car> c = switch (field) {
 					case MODEL -> new CarModelComparator();
-					case POWER -> new CarPowerComparator();
 					case YEAR -> new CarYearComparator();
+                    case POWER -> new CarPowerComparator();
 				};
 				return asc ? c : c.reversed();
 		}
