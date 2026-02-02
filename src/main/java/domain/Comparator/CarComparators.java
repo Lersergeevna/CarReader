@@ -4,7 +4,6 @@ import java.util.Comparator;
 import java.util.Objects;
 
 import domain.Car;
-import domain.Comparator.*;
 
 /**
  * Класс компаратора из всех возможных вариантов сортировок по полям
@@ -31,7 +30,7 @@ public final class CarComparators {
 	 * Базовая сортировка по 3 полям
 	 */
     public static Comparator<Car> byAllFields() {
-        return Car::compareTo;
+        return byModel().thenComparing(byYear()).thenComparing(byPower());
     }
 
 	/**
@@ -43,14 +42,14 @@ public final class CarComparators {
 		/**
 		* Добавление базового компаратора в комбинированный
 		* @param field Enum-переменная  поля
-		* @param asc по возврастанию или убыванию
+		* @param asc по возрастанию или убыванию
 		* @return возвращает комбинированный компаратор в дополнении с новым
 		*/
 		public Builder then(CarSortField field, boolean asc){
 			Objects.requireNonNull(field, "Поле сортировки не должно быть пустым");
 
 			comparator = comparator == null 
-				? comparator = base(field, asc)
+				? base(field, asc)
 				: comparator.thenComparing(base(field, asc));
 			return this;
 		}	
@@ -69,7 +68,7 @@ public final class CarComparators {
 		/**
 		* Вызов базового компаратора по полю
 		* @param field Enum-переменная  поля
-		* @param asc по возврастанию или убыванию
+		* @param asc по возрастанию или убыванию
 		* @return возвращает базовый компаратор
 		*/
 		private static Comparator<Car> base(CarSortField field, boolean asc){
