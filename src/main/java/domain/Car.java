@@ -1,6 +1,8 @@
 package domain;
 
 import validation.Validators;
+
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -47,12 +49,14 @@ public final class Car implements Comparable<Car> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Car car)) return false;
-        return power == car.power && year == car.year && model.equalsIgnoreCase(car.model);
+        return year == car.year
+                && power == car.power
+                && model.equalsIgnoreCase(car.model);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash( model, year, power);
+        return Objects.hash(model.toLowerCase(Locale.ROOT), year, power);
     }
 
     public static Builder builder() { return new Builder(); }
