@@ -1,13 +1,9 @@
+package validation;
+
 import java.time.Year;
 
 public final class Validators  {
     private Validators() {}
-
-    public static void validatePower(int power) {
-        if (power <= 0) {
-            throw new ValidationException("Мощность должна быть положительной");
-        }
-    }
 
     public static void validateModel(String model) {
         if (model == null || model.strip().isEmpty()) {
@@ -21,6 +17,12 @@ public final class Validators  {
             throw new ValidationException(
                     "Год должен быть в диапазоне от 1886 до " + maxYear
             );
+        }
+    }
+
+    public static void validatePower(int power) {
+        if (power <= 0) {
+            throw new ValidationException("Мощность должна быть положительной");
         }
     }
 }
