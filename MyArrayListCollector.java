@@ -1,3 +1,5 @@
+package collection;
+
 import java.util.stream.Collector;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
