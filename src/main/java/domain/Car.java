@@ -1,20 +1,22 @@
+package domain;
+
 import validation.Validators;
 import java.util.Objects;
 
 public final class Car implements Comparable<Car> {
-    private final int power;
     private final String model;
     private final int year;
+    private final int power;
 
     private Car(Builder b) {
-        this.power = b.power;
         this.model = b.model;
         this.year = b.year;
+        this.power = b.power;
     }
 
-    public int getPower() { return power; }
     public String getModel() { return model; }
     public int getYear() { return year; }
+    public int getPower() { return power; }
 
     @Override
     public int compareTo(Car other) {
@@ -31,7 +33,7 @@ public final class Car implements Comparable<Car> {
 
     @Override
     public String toString() {
-        return "Автомобиль{модель = " + model + ", мощность = '" + power + "', год = " + year + "}";
+        return "Автомобиль{модель = " + model + ", год = " + year + ", мощность = " + power + "}";
     }
 
     @Override
@@ -43,20 +45,15 @@ public final class Car implements Comparable<Car> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(power, model, year);
+        return Objects.hash( model, year, power);
     }
 
     public static Builder builder() { return new Builder(); }
 
     public static final class Builder {
-        private int power;
         private String model;
         private int year;
-
-        public Builder power(int power) {
-            this.power = power;
-            return this;
-        }
+        private int power;
 
         public Builder model(String model) {
             this.model = model;
@@ -65,6 +62,11 @@ public final class Car implements Comparable<Car> {
 
         public Builder year(int year) {
             this.year = year;
+            return this;
+        }
+
+        public Builder power(int power) {
+            this.power = power;
             return this;
         }
 
