@@ -12,12 +12,12 @@ import java.util.Objects;
  * 3) мощность
  */
 
-public final class Car implements Comparable<domain.Car> {
+public final class Car implements Comparable<Car> {
     private final String model;
     private final int year;
     private final int power;
 
-    private Car(domain.Car.Builder b) {
+    private Car(Builder b) {
         this.model = b.model;
         this.year = b.year;
         this.power = b.power;
@@ -28,7 +28,7 @@ public final class Car implements Comparable<domain.Car> {
     public int getPower() { return power; }
 
     @Override
-    public int compareTo(domain.Car other) {
+    public int compareTo(Car other) {
         Objects.requireNonNull(other, "Аргумент не должен быть равен null");
 
         int c1 = this.model.compareToIgnoreCase(other.model);
@@ -42,13 +42,15 @@ public final class Car implements Comparable<domain.Car> {
 
     @Override
     public String toString() {
-        return "Автомобиль{модель = " + model + ", год = " + year + ", мощность = " + power + "}";
+        return "Автомобиль{модель = " + model +
+                ", год = " + year +
+                ", мощность = " + power + "}";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof domain.Car car)) return false;
+        if (!(o instanceof Car car)) return false;
         return year == car.year
                 && power == car.power
                 && model.equalsIgnoreCase(car.model);
@@ -59,33 +61,35 @@ public final class Car implements Comparable<domain.Car> {
         return Objects.hash(model.toLowerCase(Locale.ROOT), year, power);
     }
 
-    public static domain.Car.Builder builder() { return new domain.Car.Builder(); }
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public static final class Builder {
         private String model;
         private int year;
         private int power;
 
-        public domain.Car.Builder model(String model) {
+        public Builder model(String model) {
             this.model = model;
             return this;
         }
 
-        public domain.Car.Builder year(int year) {
+        public Builder year(int year) {
             this.year = year;
             return this;
         }
 
-        public domain.Car.Builder power(int power) {
+        public Builder power(int power) {
             this.power = power;
             return this;
         }
 
-        public domain.Car build() {
+        public Car build() {
             Validators.validateModel(model);
             Validators.validateYear(year);
             Validators.validatePower(power);
-            return new domain.Car(this);
+            return new Car(this);
         }
     }
 }
