@@ -30,9 +30,9 @@ public final class CarCsvParser {
 
             // Валидация будет выполнена внутри Car.Builder через Validators
             return Car.builder()
+                    .power(power)
                     .model(model)
                     .year(year)
-                    .power(power)
                     .build();
 
         } catch (NumberFormatException e) {
@@ -51,6 +51,7 @@ public final class CarCsvParser {
         return  car.getModel() + "," + car.getYear() + "," + car.getPower();
     }
 }
+
 
 
 
