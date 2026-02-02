@@ -71,9 +71,9 @@ public final class Car implements Comparable<Car> {
         }
 
         public Car build() {
-            Validators.validatePower(power);
             Validators.validateModel(model);
             Validators.validateYear(year);
+            Validators.validatePower(power);
             return new Car(this);
         }
     }
