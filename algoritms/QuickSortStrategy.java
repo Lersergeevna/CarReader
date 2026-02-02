@@ -57,6 +57,6 @@ public class QuickSortStrategy<T> implements SortStrategy<T> {
 
     @Override
     public String name() {
-        return "QUICK";
+        return "Быстрая сортировка";
     }
 }

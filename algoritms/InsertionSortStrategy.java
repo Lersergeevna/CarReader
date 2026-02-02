@@ -29,6 +29,6 @@ public class InsertionSortStrategy<T> implements SortStrategy<T> {
 
     @Override
     public String name() {
-        return "INSERTION";
+        return "Сортировка вставками";
     }
 }

@@ -36,6 +36,6 @@ public class SelectionSortStrategy<T> implements SortStrategy<T> {
 
     @Override
     public String name() {
-        return "SELECTION";
+        return "Сортировка выбором";
     }
 }

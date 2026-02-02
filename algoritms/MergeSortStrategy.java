@@ -55,6 +55,6 @@ public class MergeSortStrategy<T> implements SortStrategy<T> {
 
     @Override
     public String name() {
-        return "MERGE";
+        return "Сортировка слиянием";
     }
 }
