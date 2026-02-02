@@ -3,6 +3,11 @@ package io;
 import domain.Car;
 import validation.ValidationException;
 
+/**
+ * Чтение/запись автомобилей в CSV-файл.
+ * Формат строки: model, year, power
+ */
+
 public final class CarCsvParser {
     private CarCsvParser() {}
 
@@ -24,15 +29,14 @@ public final class CarCsvParser {
         }
 
         try {
-            int power = Integer.parseInt(parts[0].strip());
-            String model = parts[1].strip();
-            int year = Integer.parseInt(parts[2].strip());
+            String model = parts[0].strip();
+            int year = Integer.parseInt(parts[1].strip());
+            int power = Integer.parseInt(parts[2].strip());
 
-            // Валидация будет выполнена внутри Car.Builder через Validators
             return Car.builder()
-                    .power(power)
                     .model(model)
                     .year(year)
+                    .power(power)
                     .build();
 
         } catch (NumberFormatException e) {

@@ -3,6 +3,13 @@ package domain;
 import validation.Validators;
 import java.util.Objects;
 
+/**
+ * Естественный порядок автомобилей:
+ * 1) модель (без учёта регистра)
+ * 2) год выпуска
+ * 3) мощность
+ */
+
 public final class Car implements Comparable<Car> {
     private final String model;
     private final int year;
@@ -22,13 +29,13 @@ public final class Car implements Comparable<Car> {
     public int compareTo(Car other) {
         Objects.requireNonNull(other, "Аргумент не должен быть равен null");
 
-        int c1 = Integer.compare(this.power, other.power);
+        int c1 = this.model.compareToIgnoreCase(other.model);
         if (c1 != 0) return c1;
-        
-        int c2 = this.model.compareToIgnoreCase(other.model);
-        if (c2 != 0) return c2;     
 
-        return Integer.compare(this.year, other.year);
+        int c2 = Integer.compare(this.year, other.year);
+        if (c2 != 0) return c2;
+
+        return Integer.compare(this.power, other.power);
     }
 
     @Override
@@ -40,7 +47,7 @@ public final class Car implements Comparable<Car> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Car car)) return false;
-        return power == car.power && year == car.year && Objects.equals(model, car.model);
+        return power == car.power && year == car.year && model.equalsIgnoreCase(car.model);
     }
 
     @Override

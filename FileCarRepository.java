@@ -8,7 +8,7 @@ import java.io.*;
 
 /**
  * Чтение/запись автомобилей в CSV-файл.
- * Формат строки: power,model,year
+ * Формат строки: model, year, power
  */
 public final class FileCarRepository {
     private FileCarRepository() {}
