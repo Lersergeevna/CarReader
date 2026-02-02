@@ -1,62 +1,70 @@
+package domain;
+
 import validation.Validators;
+
+import java.util.Locale;
 import java.util.Objects;
 
+/**
+ * Естественный порядок автомобилей:
+ * 1) модель (без учёта регистра)
+ * 2) год выпуска
+ * 3) мощность
+ */
+
 public final class Car implements Comparable<Car> {
-    private final int power;
     private final String model;
     private final int year;
+    private final int power;
 
     private Car(Builder b) {
-        this.power = b.power;
         this.model = b.model;
         this.year = b.year;
+        this.power = b.power;
     }
 
-    public int getPower() { return power; }
     public String getModel() { return model; }
     public int getYear() { return year; }
+    public int getPower() { return power; }
 
     @Override
     public int compareTo(Car other) {
         Objects.requireNonNull(other, "Аргумент не должен быть равен null");
 
-        int c1 = Integer.compare(this.power, other.power);
+        int c1 = this.model.compareToIgnoreCase(other.model);
         if (c1 != 0) return c1;
-        
-        int c2 = this.model.compareToIgnoreCase(other.model);
-        if (c2 != 0) return c2;     
 
-        return Integer.compare(this.year, other.year);
+        int c2 = Integer.compare(this.year, other.year);
+        if (c2 != 0) return c2;
+
+        return Integer.compare(this.power, other.power);
     }
 
     @Override
     public String toString() {
-        return "Автомобиль{модель = " + model + ", мощность = '" + power + "', год = " + year + "}";
+        return "Автомобиль{модель = " + model + ", год = " + year + ", мощность = " + power + "}";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Car car)) return false;
-        return power == car.power && year == car.year && Objects.equals(model, car.model);
+        return year == car.year
+                && power == car.power
+                && model.equalsIgnoreCase(car.model);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(power, model, year);
+        return Objects.hash(model.toLowerCase(Locale.ROOT), year, power);
     }
 
     public static Builder builder() { return new Builder(); }
 
     public static final class Builder {
-        private int power;
         private String model;
         private int year;
-
-        public Builder power(int power) {
-            this.power = power;
-            return this;
-        }
+        private int power;
 
         public Builder model(String model) {
             this.model = model;
@@ -68,10 +76,15 @@ public final class Car implements Comparable<Car> {
             return this;
         }
 
+        public Builder power(int power) {
+            this.power = power;
+            return this;
+        }
+
         public Car build() {
-            Validators.validatePower(power);
             Validators.validateModel(model);
             Validators.validateYear(year);
+            Validators.validatePower(power);
             return new Car(this);
         }
     }
