@@ -4,8 +4,6 @@ import collection.MyArrayList;
 import collection.MyArrayListCollector;
 import concurrency.OccurrenceCounter;
 import domain.Car;
-import sorting.Comparator.CarComparators;
-import sorting.Comparator.CarSortField;
 import io.FileCarRepository;
 import sorting.SortContext;
 import sorting.SortType;
@@ -13,6 +11,8 @@ import sorting.algorithms.InsertionSortStrategy;
 import sorting.algorithms.MergeSortStrategy;
 import sorting.algorithms.QuickSortStrategy;
 import sorting.algorithms.SelectionSortStrategy;
+import sorting.comparator.CarComparators;
+import sorting.comparator.CarSortField;
 import sorting.special.EvenOnlySorter;
 
 import java.io.IOException;
@@ -46,16 +46,27 @@ public final class Main {
                     }
                     case "2" -> printCars(cars);
                     case "3" -> chooseSortStrategy(sortContext);
+
                     case "4" -> {
+                        ensureCarsNotEmpty(cars);
+
                         currentComparator = chooseComparatorOrder(); // ручной порядок полей
                         sortContext.sort(cars, currentComparator);
+
                         System.out.println("Отсортировано. Алгоритм: " + sortContext.currentName());
+                        printCars(cars); // ✅ ДОБАВИЛИ: показать результат
                     }
+
                     case "5" -> {
+                        ensureCarsNotEmpty(cars);
+
                         ComparatorChoice choice = chooseNumericFieldForEvenOnly();
                         EvenOnlySorter.sortEvenOnly(cars, choice.extractor(), choice.comparator());
+
                         System.out.println("Готово. Отсортированы только элементы с чётным значением выбранного поля.");
+                        printCars(cars); // ✅ ДОБАВИЛИ: показать результат
                     }
+
                     case "6" -> appendToFile(cars);
                     case "7" -> countOccurrences(cars);
                     case "0" -> running = false;
@@ -160,6 +171,12 @@ public final class Main {
             return;
         }
         for (Car c : cars) System.out.println(c);
+    }
+
+    private static void ensureCarsNotEmpty(MyArrayList<Car> cars) {
+        if (cars == null || cars.size() == 0) {
+            throw new RuntimeException("Список пуст. Сначала загрузите/создайте автомобили (пункт 1).");
+        }
     }
 
     // ======= Выбор алгоритма =======
@@ -276,7 +293,7 @@ public final class Main {
         }
     }
 
-    // ======= ДОП. ЗАДАНИЕ 4: многопоточность с выбором поля =======
+    // ======= Многопоточность с выбором поля =======
 
     private static void countOccurrences(MyArrayList<Car> cars) {
         if (cars == null || cars.size() == 0) {

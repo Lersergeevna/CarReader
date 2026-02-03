@@ -1,4 +1,4 @@
-package sorting.Comparator;
+package sorting.comparator;
 
 /**
  * Поля, по которым пользователь может

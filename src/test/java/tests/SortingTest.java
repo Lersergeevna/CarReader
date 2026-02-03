@@ -2,7 +2,7 @@ package tests;
 
 import collection.MyArrayList;
 import domain.Car;
-import sorting.Comparator.CarComparators;
+import sorting.comparator.CarComparators;
 import sorting.SortContext;
 import sorting.algorithms.InsertionSortStrategy;
 import sorting.algorithms.SelectionSortStrategy;

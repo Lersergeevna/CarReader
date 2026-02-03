@@ -1,4 +1,4 @@
-package sorting.Comparator;
+package sorting.comparator;
 
 import java.util.Comparator;
 import domain.Car;
