@@ -56,6 +56,7 @@ public final class Car implements Comparable<Car> {
 
     @Override
     public int hashCode() {
+<<<<<<< HEAD
         return Objects.hash(model.toLowerCase(Locale.ROOT), year, power);
     }
 
