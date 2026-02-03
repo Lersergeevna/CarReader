@@ -24,7 +24,7 @@ public final class CarCsvParser {
         String[] parts = line.split(",", -1);
         if (parts.length != 3) {
             throw new ValidationException(
-                    "Ошибка в строке [" + csvLine + "]: ожидалось 3 поля ( модель, год, мощность)"
+                    "Ошибка в строке [" + csvLine + "]: ожидалось 3 поля (модель, год, мощность)"
             );
         }
 
