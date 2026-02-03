@@ -50,7 +50,7 @@ public final class OccurrenceCounter {
                     if (numericField.applyAsInt(data.get(i)) == target) count++;
                 }
                 partial[index] = count;
-            }, "поток-подсчёта-вхождений - " + t);
+            }, "поток-подсчёта-вхождений-" + t);
 
             workers[t] = worker;
             worker.start();
