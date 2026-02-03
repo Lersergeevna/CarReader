@@ -13,16 +13,6 @@ public final class OccurrenceCounter {
 
     private OccurrenceCounter() {}
 
-    /**
-     * Подсчитывает количество элементов, у которых numericField == target,
-     * используя указанное количество потоков.
-     *
-     * @param data коллекция данных
-     * @param numericField функция извлечения числового поля
-     * @param target искомое значение
-     * @param threads количество потоков
-     * @return количество вхождений
-     */
     public static <T> int countOccurrencesParallel(
             MyArrayList<T> data,
             ToIntFunction<T> numericField,
@@ -32,19 +22,21 @@ public final class OccurrenceCounter {
         Objects.requireNonNull(data, "Коллекция данных не должна быть null");
         Objects.requireNonNull(numericField, "Функция извлечения поля не должна быть null");
 
-        if (data.size() == 0) {
-            return 0;
-        }
-
-        if (threads <= 0) {
-            threads = 1;
-        }
-
         int size = data.size();
+        if (size == 0) return 0;
+
+        if (threads <= 1) {
+            int count = 0;
+            for (int i = 0; i < size; i++) {
+                if (numericField.applyAsInt(data.get(i)) == target) count++;
+            }
+            return count;
+        }
+
         int actualThreads = Math.min(threads, size);
         int chunkSize = (size + actualThreads - 1) / actualThreads;
 
-        int[] partialResults = new int[actualThreads];
+        int[] partial = new int[actualThreads];
         Thread[] workers = new Thread[actualThreads];
 
         for (int t = 0; t < actualThreads; t++) {
@@ -52,20 +44,18 @@ public final class OccurrenceCounter {
             final int start = t * chunkSize;
             final int end = Math.min(start + chunkSize, size);
 
-            workers[t] = new Thread(() -> {
+            Thread worker = new Thread(() -> {
                 int count = 0;
                 for (int i = start; i < end; i++) {
-                    if (numericField.applyAsInt(data.get(i)) == target) {
-                        count++;
-                    }
+                    if (numericField.applyAsInt(data.get(i)) == target) count++;
                 }
-                partialResults[index] = count;
-            });
+                partial[index] = count;
+            }, "поток-подсчёта-вхождений - " + t);
 
-            workers[t].start();
+            workers[t] = worker;
+            worker.start();
         }
 
-        // Ожидаем завершения всех потоков
         for (Thread thread : workers) {
             try {
                 thread.join();
@@ -75,12 +65,8 @@ public final class OccurrenceCounter {
             }
         }
 
-        // Суммируем частичные результаты
         int total = 0;
-        for (int count : partialResults) {
-            total += count;
-        }
-
+        for (int x : partial) total += x;
         return total;
     }
 }

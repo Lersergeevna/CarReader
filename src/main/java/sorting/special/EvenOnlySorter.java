@@ -1,10 +1,11 @@
 package sorting.special;
 
 import collection.MyArrayList;
-import sorting.SortStrategy;
 import sorting.algorithms.MergeSortStrategy;
 
+
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.function.ToIntFunction;
 
 public final class EvenOnlySorter {
@@ -15,7 +16,13 @@ public final class EvenOnlySorter {
             ToIntFunction<T> numericField,
             Comparator<T> comparator
     ) {
+        Objects.requireNonNull(data, "Коллекция не должна быть null");
+        Objects.requireNonNull(numericField, "Функция извлечения числового поля не должна быть null");
+        Objects.requireNonNull(comparator, "Компаратор не должен быть null");
+
         int n = data.size();
+        if (n < 2) return;
+
         MyArrayList<T> evens = new MyArrayList<>();
 
         for (int i = 0; i < n; i++) {
@@ -25,9 +32,10 @@ public final class EvenOnlySorter {
             }
         }
 
-        // сортируем чётные O(m log m)
-        SortStrategy<T> strategy = new MergeSortStrategy<>();
-        strategy.sort(evens, comparator);
+        if (evens.size() < 2) return;
+
+        // сортируем чётные
+        new MergeSortStrategy<T>().sort(evens, comparator);
 
         // раскладываем назад
         int idx = 0;
