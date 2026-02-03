@@ -1,4 +1,4 @@
-package domain.Comparator;
+package sorting.Comparator;
 
 /**
  * Поля, по которым пользователь может

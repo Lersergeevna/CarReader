@@ -2,7 +2,7 @@ package tests;
 
 import collection.MyArrayList;
 import domain.Car;
-import domain.Comparator.CarComparators;
+import sorting.Comparator.CarComparators;
 import sorting.special.EvenOnlySorter;
 
 public final class EvenOnlySorterTest {

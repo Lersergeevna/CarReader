@@ -1,4 +1,4 @@
-package domain.Comparator;
+package sorting.Comparator;
 
 import java.util.Comparator;
 import java.util.Objects;
