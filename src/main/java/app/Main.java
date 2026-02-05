@@ -14,6 +14,7 @@ import sorting.algorithms.SelectionSortStrategy;
 import sorting.comparator.CarComparators;
 import sorting.comparator.CarSortField;
 import sorting.special.EvenOnlySorter;
+import validation.Validators;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -142,8 +143,8 @@ public final class Main {
                     System.out.println();
                     System.out.println("Автомобиль #" + (i + 1));
                     String model = readString("Модель: ");
-                    int year = readInt("Год: ");
-                    int power = readInt("Мощность: ");
+                    int year = readValidatedInt("Год: ", Validators::validateYear);
+                    int power = readValidatedInt("Мощность: ", Validators::validatePower);
 
                     return Car.builder().model(model).year(year).power(power).build();
                 })
@@ -157,6 +158,18 @@ public final class Main {
             return Integer.parseInt(s);
         } catch (NumberFormatException e) {
             throw new RuntimeException("Ожидалось целое число.");
+        }
+    }
+
+    private static int readValidatedInt(String prompt, java.util.function.IntConsumer validator) {
+        while (true) {
+            try {
+                int value = readInt(prompt);
+                validator.accept(value);
+                return value;
+            } catch (RuntimeException e) {
+                System.out.println("Ошибка: " + e.getMessage());
+            }
         }
     }
 
